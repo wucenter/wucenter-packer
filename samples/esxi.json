@@ -1,0 +1,14 @@
+{
+    "VMW_HOST":         "ESXI_HOSTNAME",
+
+    "VMW_USERNAME":     "ESXI_USERNAME",
+    "VMW_PASSWORD":     "ESXI_PASSWORD",
+
+    "VMW_DATASTORE":    "ESXI_Datastore",
+    "VMW_NETWORK":      "ESXI_Network",
+
+    "NET_NM":           "255.255.255.0",
+    "NET_IP":           "192.168.1.245",
+    "NET_GW":           "192.168.1.254",
+    "NET_NS":           "192.168.1.253"
+}

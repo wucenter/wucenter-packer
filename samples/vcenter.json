@@ -1,0 +1,16 @@
+{
+    "VMW_VCENTER":      "VCENTER_HOSTNAME",
+
+    "VMW_USERNAME":     "VCENTER_USERNAME",
+    "VMW_PASSWORD":     "VCENTER_PASSWORD",
+
+    "VMW_FOLDER":       "_TEMPLATES",
+    "VMW_CLUSTER":      "VCENTER_Cluster",
+    "VMW_DATASTORE":    "VCENTER_Datastore",
+    "VMW_NETWORK":      "VCENTER_Network",
+
+    "NET_NM":           "255.255.255.0",
+    "NET_IP":           "10.0.1.245",
+    "NET_GW":           "10.0.1.254",
+    "NET_NS":           "10.0.1.253"
+}

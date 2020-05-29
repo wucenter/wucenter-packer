@@ -1,0 +1,100 @@
+{
+
+  "variables":
+  {
+    "VERSION":                  "0.1",
+
+    "RSC_CPU":                  "1",
+    "RSC_RAM":                  "2048",
+    "RSC_DISK":                 "2048",
+
+    "SSH_USERNAME":             "ansibler",
+    "SSH_PASSWORD":             "ansibler",
+
+    "BUILD_DATE":               "1970-01-01 23:59:59",
+    "BUILD_USER":               "author"
+  },
+
+
+  "builders":
+  [
+    {
+      "type":                   "vmware-iso",
+      "vm_name":                "TEMPLATE_ubuntu-bionic_{{user `VERSION`}}",
+      "notes":                  "TEMPLATE_ubuntu-bionic_{{user `VERSION`}} ( Packer build by {{user `BUILD_USER`}} on {{user `BUILD_DATE`}} )",
+
+      "remote_username":        "{{user `VMW_USERNAME`}}",
+      "remote_password":        "{{user `VMW_PASSWORD`}}",
+
+      "remote_host":            "{{user `VMW_HOST`}}",
+      "remote_datastore":       "{{user `VMW_DATASTORE`}}",
+      "remote_type":            "esx5",
+
+      "guest_os_type":          "ubuntu64Guest",
+      "vnc_disable_password":   "true",
+      "skip_export":            "true",
+      "keep_registered":        "true",
+      "disk_type_id":           "0",
+
+      "disk_size":              "{{user `RSC_DISK`}}",
+      "cpus":                   "{{user `RSC_CPU`}}",
+      "vmx_data": {
+        "memsize":                          "{{user `RSC_RAM`}}",
+        "numvcpus":                         "{{user `RSC_CPU`}}",
+        "ethernet0.networkName":            "{{user `VMW_NETWORK`}}",
+        "ethernet0.present":                "TRUE",
+        "ethernet0.startConnected":         "TRUE",
+        "ethernet0.virtualDev":             "vmxnet3",
+        "ethernet0.addressType":            "generated",
+        "ethernet0.generatedAddressOffset": "0",
+        "ethernet0.wakeOnPcktRcv":          "FALSE"
+      },
+
+      "iso_urls":               "http://cdimage.ubuntu.com/releases/18.04.4/release/ubuntu-18.04.4-server-amd64.iso",
+      "iso_checksum_url":       "http://cdimage.ubuntu.com/releases/18.04.4/release/SHA256SUMS",
+      "iso_checksum_type":      "sha256",
+
+      "ssh_username":           "{{user `SSH_USERNAME`}}",
+      "ssh_password":           "{{user `SSH_PASSWORD`}}",
+
+      "floppy_files": [
+        "d-i/SEED_UBI.CFG",
+        "d-i/LATE_UBI.SH"
+      ],
+
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/hwe-vmlinuz",
+        " initrd=/install/hwe-initrd.gz",
+        " ipv6.disable=1",
+        " net.ifnames=0 biosdevname=0",
+        " noacpi",
+        " noprompt",
+        " auto=true",
+        " priority=critical",
+        " language=en locale=en_US",
+        " country=FR keymap=fr",
+        " netcfg/get_nameservers={{user `NET_NS`}}",
+        " netcfg/get_ipaddress={{user `NET_IP`}}",
+        " netcfg/get_gateway={{user `NET_GW`}}",
+        " netcfg/get_netmask={{user `NET_NM`}}",
+        " netcfg/confirm_static=true",
+        " netcfg/disable_dhcp=true",
+        " netcfg/disable_autoconfig=true",
+        " file=/media/SEED_UBI.CFG",
+        "<enter>"
+      ]
+
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["sudo sed -E -i '/^\\/dev\\/fd0\\s/d' /etc/fstab ; sudo rm -vf /etc/netplan/01-netcfg.yaml /etc/resolv.conf ; sudo ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf"]
+    }
+  ]
+
+}
