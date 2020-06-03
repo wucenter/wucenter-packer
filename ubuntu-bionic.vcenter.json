@@ -2,6 +2,7 @@
 
   "variables":
   {
+    "NAME":                     "TEMPLATE_ubuntu-bionic_",
     "VERSION":                  "0.1",
 
     "RSC_CPU":                  "1",
@@ -9,10 +10,7 @@
     "RSC_DISK":                 "2048",
 
     "SSH_USERNAME":             "ansibler",
-    "SSH_PASSWORD":             "ansibler",
-
-    "BUILD_DATE":               "1970-01-01 23:59:59",
-    "BUILD_USER":               "author"
+    "SSH_PASSWORD":             "ansibler"
   },
 
 
@@ -20,18 +18,18 @@
   [
     {
       "type":                   "vsphere-iso",
-      "vm_name":                "TEMPLATE_ubuntu-bionic_{{user `VERSION`}}",
-      "notes":                  "TEMPLATE_ubuntu-bionic_{{user `VERSION`}} ( Packer build by {{user `BUILD_USER`}} on {{user `BUILD_DATE`}} )",
+      "vm_name":                "{{ user `NAME` }}{{ user `VERSION` }}",
+      "notes":                  "{{ user `NAME` }}{{ user `VERSION` }} ( wucenter-packer build on {{ isotime }} )",
 
-      "vcenter_server":         "{{user `VMW_VCENTER`}}",
-      "username":               "{{user `VMW_USERNAME`}}",
-      "password":               "{{user `VMW_PASSWORD`}}",
+      "vcenter_server":         "{{ user `VMW_VCENTER` }}",
+      "username":               "{{ user `VMW_USERNAME` }}",
+      "password":               "{{ user `VMW_PASSWORD` }}",
 
-      "host":                   "{{user `VMW_HOST`}}",
-      "datastore":              "{{user `VMW_DATASTORE`}}",
-      "folder":                 "{{user `VMW_FOLDER`}}",
-      "cluster":                "{{user `VMW_CLUSTER`}}",
-      "network":                "{{user `VMW_NETWORK`}}",
+      "host":                   "{{ user `VMW_HOST` }}",
+      "datastore":              "{{ user `VMW_DATASTORE` }}",
+      "folder":                 "{{ user `VMW_FOLDER` }}",
+      "cluster":                "{{ user `VMW_CLUSTER` }}",
+      "network":                "{{ user `VMW_NETWORK` }}",
 
       "convert_to_template":    true,
       "insecure_connection":    true,
@@ -39,14 +37,14 @@
       "guest_os_type":          "ubuntu64Guest",
       "network_card":           "vmxnet3",
 
-      "disk_size":              "{{user `RSC_DISK`}}",
+      "disk_size":              "{{ user `RSC_DISK` }}",
       "disk_controller_type":   "pvscsi",
       "disk_thin_provisioned":  true,
 
-      "CPUs":                   "{{user `RSC_CPU`}}",
+      "CPUs":                   "{{ user `RSC_CPU` }}",
       "CPU_hot_plug":           true,
 
-      "RAM":                    "{{user `RSC_RAM`}}",
+      "RAM":                    "{{ user `RSC_RAM` }}",
       "RAM_hot_plug":           true,
       "RAM_reserve_all":        true,
 
@@ -54,8 +52,8 @@
       "iso_checksum_url":       "http://cdimage.ubuntu.com/releases/18.04.4/release/SHA256SUMS",
       "iso_checksum_type":      "sha256",
 
-      "ssh_username":           "{{user `SSH_USERNAME`}}",
-      "ssh_password":           "{{user `SSH_PASSWORD`}}",
+      "ssh_username":           "{{ user `SSH_USERNAME` }}",
+      "ssh_password":           "{{ user `SSH_PASSWORD` }}",
 
       "floppy_files": [
         "d-i/SEED_UBI.CFG",
@@ -76,10 +74,10 @@
         " priority=critical",
         " language=en locale=en_US",
         " country=FR keymap=fr",
-        " netcfg/get_nameservers={{user `NET_NS`}}",
-        " netcfg/get_ipaddress={{user `NET_IP`}}",
-        " netcfg/get_gateway={{user `NET_GW`}}",
-        " netcfg/get_netmask={{user `NET_NM`}}",
+        " netcfg/get_nameservers={{ user `NET_NS` }}",
+        " netcfg/get_ipaddress={{ user `NET_IP` }}",
+        " netcfg/get_gateway={{ user `NET_GW` }}",
+        " netcfg/get_netmask={{ user `NET_NM` }}",
         " netcfg/confirm_static=true",
         " netcfg/disable_dhcp=true",
         " netcfg/disable_autoconfig=true",
