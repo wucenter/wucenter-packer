@@ -6,7 +6,7 @@ Official template builder for [WUcenter Ansible framework](https://github.com/wu
 
 ## Features
 
-- VmWare products support
+- Dual VMware products support
     + Supports vCenter cluster API (`vsphere-iso`)
     + Supports single ESXi host (`vmware-iso`)
 - Ubuntu products support
@@ -29,7 +29,7 @@ Official template builder for [WUcenter Ansible framework](https://github.com/wu
 
 ## VMware ESXi prerequisites
 
-VmWare ESXi is natively supported by Packer `vmware-iso` builder.
+VMware ESXi is natively supported by Packer `vmware-iso` builder.
 
 As seen [here](https://web.archive.org/web/20200206152031/https://blog.ukotic.net/2019/03/05/configuring-esxi-prerequisites-for-packer/) some tweaking is required on the ESXi server.
 
@@ -64,14 +64,14 @@ esxcli network firewall refresh
 
 ## Installation
 
-- Install latest Packer [binary](https://releases.hashicorp.com/packer/) in your `$PATH`
 - Clone the project somewhere
+- Copy latest Packer [binary](https://releases.hashicorp.com/packer/) in project or `$PATH`
 
 ## Configuration
 
 Create a configuration file from `samples/*.json`:
 - Setup static network configuration: `NET_*`.
-- Setup VmWare server credentials: `VMW_*`
+- Setup VMware server credentials: `VMW_*`
 
 Remeber, 3 configuration levels are available:
 1. Default variables in `ubuntu-{bionic,focal}.{exsi,vcenter}.json`
@@ -87,10 +87,8 @@ Recommended usage is using `var-file`s for config, except maybe for secrets and 
 ~~~ bash
 time PACKER_LOG=1 packer build -on-error=ask -force \
   -var-file=samples/vcenter.json \
-  -var 'VERSION=2.1' \
-  -var 'VMW_PASSWORD=s3cr3t' \
-  -var "BUILD_DATE=$( date --rfc-3339=seconds )" \
-  -var "BUILD_USER=$USER" \
+  -var 'NAME=MY_TEMPLATE_' \
+  -var 'VERSION=1.1' \
   ubuntu-bionic.vcenter.json
 ~~~
 
@@ -99,10 +97,8 @@ time PACKER_LOG=1 packer build -on-error=ask -force \
 ~~~ bash
 time PACKER_LOG=1 packer build -on-error=ask -force \
   -var-file=samples/esxi.json \
-  -var 'VERSION=2.1' \
-  -var 'VMW_PASSWORD=s3cr3t' \
-  -var "BUILD_DATE=$( date --rfc-3339=seconds )" \
-  -var "BUILD_USER=$USER" \
+  -var 'NAME=MY_TEMPLATE_NAME_' \
+  -var 'VERSION=1.1' \
   ubuntu-bionic.esxi.json
 ~~~
 
@@ -112,13 +108,35 @@ time PACKER_LOG=1 packer build -on-error=ask -force \
 time PACKER_LOG=1 packer build -on-error=ask -force \
   -var-file=samples/vcenter.json \
   -var 'VERSION=2.1' \
-  -var 'VMW_PASSWORD=s3cr3t' \
-  -var "BUILD_DATE=$( date --rfc-3339=seconds )" \
-  -var "BUILD_USER=$USER" \
   ubuntu-focal.vcenter.json
 ~~~
 
 ## Documentation
+
+### Configuration
+
+The following self-explaining template variables are used:
+
+- NAME
+- VERSION
+- RSC_CPU
+- RSC_RAM
+- RSC_DISK
+- NET_GW
+- NET_IP
+- NET_NM
+- NET_NS
+- VMW_VCENTER
+- VMW_USERNAME
+- VMW_PASSWORD
+- VMW_CLUSTER
+- VMW_DATASTORE
+- VMW_NETWORK
+- VMW_FOLDER
+- SSH_USERNAME
+- SSH_PASSWORD
+
+Note that modifing SSH_USERNAME & SSH_PASSWORD also requires editing `passwd/*` values in corresponding `d-i/SEED_*.CFG` file.
 
 ### Implementation
 
@@ -128,17 +146,18 @@ time PACKER_LOG=1 packer build -on-error=ask -force \
 
 Networking is configured from Linux kernel boot command.
 
-### Build references
+### Hacking
 
-<https://github.com/jetbrains-infra/packer-builder-vsphere#parameter-reference>
+You can simply customize your template by editing debian-installer seed and corresponding "late" script in `d-i/`
 
-<https://packer.io/docs/builders/vmware-iso.html#vmware-iso-builder-configuration-reference>
+### References
 
-<https://help.ubuntu.com/lts/installation-guide/s390x/apbs04.html>
+- Packer vCenter builder <https://github.com/jetbrains-infra/packer-builder-vsphere#parameter-reference>
+- Packer ESXi builder <https://packer.io/docs/builders/vmware-iso.html#vmware-iso-builder-configuration-reference>
+- Ubuntu preseeding <https://help.ubuntu.com/lts/installation-guide/s390x/apbs04.html>
 
 ## Roadmap
 
 - Workaround more VMware bugs on bionic
   + <https://kb.vmware.com/s/article/54986>
   + <https://kb.vmware.com/s/article/56409>
-  
