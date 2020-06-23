@@ -189,8 +189,11 @@ apt-get -y purge deborphan
 
 # APT install
 apt-get -y install --no-install-recommends \
-    linux-virtual open-vm-tools perl-modules-5.30 cloud-init \
-    openssh-server python3-apt sudo
+    linux-virtual \
+    open-vm-tools perl-modules-5.30 cloud-init \
+    sudo policykit-1 \
+    openssh-server \
+    python3-apt
 
 # APT clean
 apt-get -y autoremove --purge

@@ -191,8 +191,11 @@ apt-get -y purge deborphan
 
 # APT install
 apt-get -y install --no-install-recommends \
-    linux-virtual-hwe-18.04 open-vm-tools perl-modules-5.26 cloud-init \
-    openssh-server python3-apt sudo \
+    linux-virtual-hwe-18.04 \
+    open-vm-tools perl-modules-5.26 cloud-init \
+    sudo policykit-1 \
+    openssh-server \
+    python3-apt \
     net-tools vim
 
 # TODO FIX open-vm-tools for vCenter < 6.7U3

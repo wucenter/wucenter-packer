@@ -136,7 +136,7 @@ The following self-explaining template variables are used:
 - SSH_USERNAME
 - SSH_PASSWORD
 
-Note that modifing SSH_USERNAME & SSH_PASSWORD also requires editing `passwd/*` values in corresponding `d-i/SEED_*.CFG` file.
+Note that modifying SSH_USERNAME & SSH_PASSWORD also requires editing `passwd/*` values in corresponding `d-i/SEED_*.CFG` file.
 
 ### Implementation
 
